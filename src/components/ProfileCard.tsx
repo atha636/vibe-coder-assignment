@@ -38,7 +38,7 @@ const { inList, toggle } = useListItem(profile, platform);
       />
       <div className="text-left flex-1 min-w-0">
         <div className="font-semibold text-slate-900 truncate">
-          @{profile.username}
+          @{profile.username || "unknown"}
           <VerifiedBadge verified={profile.is_verified} />
         </div>
         <div className="text-sm text-slate-500 truncate">{profile.fullname}</div>
