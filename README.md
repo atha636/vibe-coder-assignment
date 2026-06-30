@@ -1,80 +1,76 @@
-# Wobb Frontend Assignment
+# Influencer Search — Wobb Assignment Submission
 
-A starter influencer search application built with **React**, **TypeScript**, **Vite**, and **Tailwind CSS**. This project is intentionally left in a rough-but-working state for candidates to improve.
+## What I Changed
 
-## Getting Started
+### Bug Fixes
+- **Case-sensitive search**: `filterProfiles` was lowercasing the fullname match but not the username match, so searches like "John" missed usernames with different casing. Fixed both sides to lowercase consistently.
+- **Wrong engagement rate calculation**: The detail page multiplied `engagement_rate` by `10000` instead of `100`, displaying a value 100x too large. Fixed to use the shared `formatEngagementRate` utility, which was already correct but unused.
+- **Mislabeled "Engagements" stat**: This block was reusing `engagement_rate` (a percentage) instead of the actual `engagements` count, showing the same wrong percentage twice under different labels. Now correctly displays the raw engagement count.
+- **Duplicated follower-formatting logic**: `ProfileCard` and `ProfileDetailPage` each had their own local follower-formatting function with inconsistent decimal precision. Consolidated into the existing shared `formatFollowers` utility in `utils/formatters.ts`.
+- **Stale state in click handler**: `handleProfileClick` read `clickCount` directly from closure, which could lose increments on rapid clicks and logged the old count instead of the new one. Switched to the functional `setState` updater form.
+- **Removed unused/incompatible dependency**: `react-beautiful-dnd` was listed in `package.json` but never imported anywhere, and it's deprecated and not compatible with React 19.
+- **Removed dead code**: `SearchBar.tsx` was an unused component, fully duplicated by the inline search input in `PlatformFilter.tsx`. Also removed a leftover `data-search` debug attribute on profile cards.
+- **Accessibility**: Added missing `alt` attributes on all profile images, `aria-pressed` on platform filter buttons, keyboard support (`tabIndex`, `onKeyDown`) on clickable profile cards, and `rel="noopener noreferrer"` on the external "View on platform" link.
+- **Leftover boilerplate CSS**: `index.css` contained unrelated styling from a different template (a `1126px`-capped `#root`, oversized `h1` rules overriding Tailwind utilities, unused `--accent` purple theme variables). Removed the conflicting global element styles so Tailwind utility classes render correctly.
 
-```bash
+### State Management — Zustand
+The assignment brief mentions replacing React Context with Zustand; this starter project did not actually contain any Context usage, so the new global state (the "Add to List" feature) was built directly with Zustand rather than migrated from an existing implementation.
+
+`src/store/listStore.ts` holds the selected-profiles list, using Zustand's `persist` middleware to back the store with `localStorage` (key: `wobb-selected-profiles`), so the list survives page refreshes automatically.
+
+### Feature: Add to List
+- Add/remove profiles from both the search results grid and the profile detail page.
+- Duplicate prevention by `user_id` (checked inside the store's `addProfile` action).
+- A dedicated `/list` route (`ListPage.tsx`) displays all selected profiles with a remove action.
+- Live count shown in the header ("My List (n)").
+- Persists across refresh via `localStorage`.
+
+### UI/UX Redesign
+- Replaced the single-column, fixed-width (`700px`) card layout with a responsive grid (1 column on mobile, 2 on tablet, 3 on desktop).
+- Modern card styling: rounded corners, subtle shadows, hover states, consistent spacing using a slate/indigo palette.
+- Sticky header with platform branding and list count.
+- Pill-style platform filter tabs instead of plain bordered buttons.
+- Restyled stat blocks on the profile detail page for clearer visual hierarchy (uppercase labels, larger values).
+
+### Performance
+- Memoized `extractProfiles` and `filterProfiles` calls in `SearchPage.tsx` with `useMemo` so the dataset isn't re-derived on every keystroke/render — only when `platform` or `searchQuery` actually change.
+- Per-profile JSON detail files are automatically code-split via `import.meta.glob` (Vite), so only the visited profile's data is loaded, not the entire dataset.
+
+### Code Quality
+- Removed duplicated formatting logic in favor of shared utilities.
+- Tightened prop interfaces (removed an unused `searchQuery` prop being threaded through `ProfileList` → `ProfileCard` for no purpose).
+- Fixed a Rules-of-Hooks violation where a Zustand hook was called conditionally (after early returns) in `ProfileDetailPage.tsx`.
+
+## Libraries Added
+- **zustand** (`^5.0.3`) — lightweight global state management for the Add to List feature, with built-in `persist` middleware for localStorage sync.
+
+## Libraries Removed
+- **react-beautiful-dnd** — unused, deprecated, and not React 19-compatible.
+
+## Assumptions
+- Profile detail JSON is only seeded for a subset of profiles (`cristiano`, `mrbeast`, `MrBeast6000`, `khaby.lame`, `tseries`, `instagram`). Profiles that appear in search results but lack a corresponding detail file (e.g. `kyliejenner`) correctly show a "Could not load profile details" fallback rather than crashing — this is treated as expected behavior given the limited sample data, not a bug.
+- "Persistent after page refresh" was interpreted as `localStorage` persistence (no backend in this project), which is consistent with the rest of the app's data-loading approach (static JSON, no API).
+
+## Trade-offs
+- Used Tailwind utility classes directly rather than introducing a component library (e.g. shadcn/ui) to keep the diff focused and avoid adding unnecessary dependencies for a relatively small UI surface.
+- No automated tests were added in the time available; manual testing was done across all three platforms and the Add/Remove/persist flow.
+
+## Remaining Improvements (Given More Time)
+- Add unit tests (e.g. Vitest + React Testing Library) for `filterProfiles`, the Zustand store actions, and key components.
+- Add loading skeletons instead of plain "Loading..." text.
+- Debounce the search input to avoid filtering on every keystroke for larger datasets.
+- Add sorting options (followers, engagement rate) on the search page.
+- Add empty/error states with retry actions instead of a static message.
+
+## Running Locally
+```
 npm install
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173) to view the app.
-
-## What's Included
-
-- **Search / Dashboard** — filter influencers by platform (Instagram, YouTube, TikTok) and search by username or full name
-- **Profile Details** — click a profile to view extended data loaded from individual JSON files
-- **Routing** — `react-router-dom` with `/` (search) and `/profile/:username` (details)
-
-Sample data lives in:
-
-- `src/assets/data/search/` — platform search results (10 profiles each)
-- `src/assets/data/profiles/` — detailed profile JSON per username
-
-## How to Submit
-
-1. **Download or clone** this starter project to your machine.
-2. **Create a new repository** on your own GitHub account. Do not fork the original assignment repo — push your work to a repo you own.
-3. Complete the tasks below and push your changes to that repository.
-4. **Share the public GitHub repository URL** with us as your submission.
-
-### Deadline (strict)
-
-- **Due:** **2 July 2026, 2:00 PM IST** (Indian Standard Time, UTC+5:30)
-- **Any git commits made after this deadline will disqualify your submission.** We will only consider the repository state as of the deadline; late commits will not be reviewed.
-- Make sure your final work is pushed **before** the cutoff.
-
-## AI Usage
-
-You may use any AI tools (Cursor, ChatGPT, Claude, GitHub Copilot, etc.). We are evaluating your final solution and engineering decisions.
-
-## Your Tasks
-
-Complete the following as part of your submission:
-
-1. **Find and fix all bugs and quality issues** — the codebase contains intentional bugs and quality issues. Identify and resolve them.
-
-2. **Completely redesign the UI/UX** — replace the basic layout with a polished, modern interface. Focus on usability, visual hierarchy, and delight.
-
-3. **Replace React Context with Zustand** — when you implement state management for the selected list, use [Zustand](https://github.com/pmndrs/zustand) instead of React Context.
-
-4. **Implement "Select profile & Add to List"** — the disabled "Add to List" button is a stub. Build the full feature:
-   - Select / add profiles to a persistent list
-   - View and manage the selected list
-   - Handle duplicates appropriately
-
-5. **Improve code quality and project structure** — refactor as needed, add proper types, and follow React best practices.
-
-6. **Optimize performance** — apply sensible optimizations where appropriate.
-
-7. **Use any libraries you need** — you are not limited to the current stack. Choose tools that help you deliver a great result (UI kits, state managers, testing libraries, etc.).
-
-## Scripts
-
-| Command        | Description              |
-| -------------- | ------------------------ |
-| `npm run dev`  | Start development server |
-| `npm run build`| Production build         |
-| `npm run lint` | Run ESLint               |
-
-## Submission Notes
-
-- Document any assumptions or trade-offs in your README
-- Ensure `npm run build` passes before submitting
-- Focus on demonstrating your judgment — not every possible feature needs to be built, but the core assignment items should be addressed thoughtfully
-- Double-check that your repo is public (or that we have access) and that the link is included in your submission
-- Please make meaningful commits throughout your work. We may review your commit history.
-- **Bonus:** Deploying the app (e.g. Vercel, Netlify, GitHub Pages) is optional but will be considered a plus — include the live URL in your submission if you do
-
-Good luck!
+## Build & Lint
+```
+npm run build
+npm run lint
+```
+Both pass cleanly with zero errors.
