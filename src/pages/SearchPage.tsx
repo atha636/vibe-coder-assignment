@@ -8,7 +8,7 @@ import { extractProfiles, filterProfiles } from "@/utils/dataHelpers";
 export function SearchPage() {
   const [platform, setPlatform] = useState<Platform>("instagram");
   const [searchQuery, setSearchQuery] = useState("");
-  const [clickCount, setClickCount] = useState(0);
+  const [, setClickCount] = useState(0);
 
   const allProfiles = useMemo(() => extractProfiles(platform), [platform]);
   const filtered = useMemo(
@@ -46,7 +46,6 @@ export function SearchPage() {
       <ProfileList
         profiles={filtered}
         platform={platform}
-        searchQuery={searchQuery}
         onProfileClick={handleProfileClick}
       />
     </Layout>

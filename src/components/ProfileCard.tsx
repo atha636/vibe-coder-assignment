@@ -7,16 +7,13 @@ import { formatFollowers } from "@/utils/formatters";
 interface ProfileCardProps {
   profile: UserProfileSummary;
   platform: Platform;
-  searchQuery: string;
   onProfileClick?: (username: string) => void;
 }
-
 
 
 export function ProfileCard({
   profile,
   platform,
-  searchQuery,
   onProfileClick,
 }: ProfileCardProps) {
   const navigate = useNavigate();
