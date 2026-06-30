@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { Layout } from "@/components/Layout";
 import { VerifiedBadge } from "@/components/VerifiedBadge";
-import type { FullUserProfile, ProfileDetailResponse } from "@/types";
+import type { FullUserProfile, ProfileDetailResponse, Platform } from "@/types";
+import { useListStore } from "@/store/listStore";
 import { formatEngagementRate, formatFollowers } from "@/utils/formatters";
 import { loadProfileByUsername } from "@/utils/profileLoader";
 
@@ -16,6 +17,7 @@ export function ProfileDetailPage() {
     null
   );
   const [loaded, setLoaded] = useState(false);
+  const { addProfile, removeProfile, isInList } = useListStore();
 
   useEffect(() => {
     if (!username) return;
@@ -57,7 +59,8 @@ export function ProfileDetailPage() {
   }
 
   const user: FullUserProfile = profileData.data.user_profile;
-
+  const inList = isInList(user.user_id);
+  
   return (
     <Layout title={user.fullname}>
       <Link to="/" className="text-sm text-blue-600 mb-4 inline-block">
@@ -143,13 +146,18 @@ export function ProfileDetailPage() {
             </a>
           )}
 
-          {/* TODO: candidates must implement Add to List feature */}
-          {/* TODO: candidates must implement Add to List feature */}
           <button
-            disabled
-            className="block mt-4 px-4 py-2 bg-gray-300 text-gray-500 rounded cursor-not-allowed"
+            onClick={() => {
+              if (inList) removeProfile(user.user_id);
+              else addProfile({ ...user, platform: platform as Platform });
+            }}
+            className={`block mt-4 px-4 py-2 rounded ${
+              inList
+                ? "bg-red-100 text-red-700 hover:bg-red-200"
+                : "bg-gray-800 text-white hover:bg-gray-700"
+            }`}
           >
-            Add to List
+            {inList ? "Remove from List" : "Add to List"}
           </button>
         </div>
       </div>
