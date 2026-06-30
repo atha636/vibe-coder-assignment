@@ -1,5 +1,5 @@
 import type { Platform } from "@/types";
-import { PLATFORMS, getPlatformLabel } from "@/utils/dataHelpers";
+import { PLATFORMS, getPlatformLabel } from "@/lib/filters";
 
 interface PlatformFilterProps {
   selected: Platform;

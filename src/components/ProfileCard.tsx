@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import type { Platform, UserProfileSummary } from "@/types";
 import { VerifiedBadge } from "./VerifiedBadge";
-import { useListStore } from "@/store/listStore";
-import { formatFollowers } from "@/utils/formatters";
+import { useListItem } from "@/hooks/useListItem";
+import { formatFollowers } from "@/lib/formatters";
 
 interface ProfileCardProps {
   profile: UserProfileSummary;
@@ -17,8 +17,7 @@ export function ProfileCard({
   onProfileClick,
 }: ProfileCardProps) {
   const navigate = useNavigate();
-const { addProfile, removeProfile, isInList } = useListStore();
-  const inList = isInList(profile.user_id);
+const { inList, toggle } = useListItem(profile, platform);
   const handleClick = () => {
     if (onProfileClick) onProfileClick(profile.username);
     navigate(`/profile/${profile.username}?platform=${platform}`);
@@ -50,8 +49,7 @@ const { addProfile, removeProfile, isInList } = useListStore();
      <button
         onClick={(e) => {
           e.stopPropagation();
-          if (inList) removeProfile(profile.user_id);
-          else addProfile({ ...profile, platform });
+          toggle();
         }}
         className={`shrink-0 px-3 py-1.5 text-sm font-medium rounded-lg transition-all duration-150 active:scale-95 ${
           inList

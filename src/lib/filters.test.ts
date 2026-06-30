@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { filterProfiles } from "./dataHelpers";
+import { filterProfiles } from "./filters";
 import type { UserProfileSummary } from "@/types";
 
 const mockProfiles: UserProfileSummary[] = [

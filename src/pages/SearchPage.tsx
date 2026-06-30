@@ -3,7 +3,7 @@ import type { Platform } from "@/types";
 import { Layout } from "@/components/Layout";
 import { PlatformFilter } from "@/components/PlatformFilter";
 import { ProfileList } from "@/components/ProfileList";
-import { extractProfiles, filterProfiles } from "@/utils/dataHelpers";
+import { extractProfiles, filterProfiles } from "@/lib/filters";
 
 export function SearchPage() {
   const [platform, setPlatform] = useState<Platform>("instagram");

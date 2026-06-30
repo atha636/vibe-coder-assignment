@@ -4,8 +4,8 @@ import { Layout } from "@/components/Layout";
 import { VerifiedBadge } from "@/components/VerifiedBadge";
 import type { FullUserProfile, ProfileDetailResponse, Platform } from "@/types";
 import { useListStore } from "@/store/listStore";
-import { formatEngagementRate, formatFollowers } from "@/utils/formatters";
-import { loadProfileByUsername } from "@/utils/profileLoader";
+import { formatEngagementRate, formatFollowers } from "@/lib/formatters";
+import { loadProfileByUsername } from "@/lib/api/profileLoader";
 
 
 
@@ -17,7 +17,9 @@ export function ProfileDetailPage() {
     null
   );
   const [loaded, setLoaded] = useState(false);
-  const { addProfile, removeProfile, isInList } = useListStore();
+ const addProfile = useListStore((state) => state.addProfile);
+  const removeProfile = useListStore((state) => state.removeProfile);
+  const profiles = useListStore((state) => state.profiles);
 
   useEffect(() => {
     if (!username) return;
@@ -70,8 +72,12 @@ export function ProfileDetailPage() {
     );
   }
 
-  const user: FullUserProfile = profileData.data.user_profile;
-  const inList = isInList(user.user_id);
+const user: FullUserProfile = profileData.data.user_profile;
+  const inList = profiles.some((p) => p.user_id === user.user_id);
+  const toggle = () => {
+    if (inList) removeProfile(user.user_id);
+    else addProfile({ ...user, platform: platform as Platform });
+  };
   
   return (
     <Layout title={user.fullname}>
@@ -165,10 +171,7 @@ export function ProfileDetailPage() {
           )}
 
           <button
-            onClick={() => {
-              if (inList) removeProfile(user.user_id);
-              else addProfile({ ...user, platform: platform as Platform });
-            }}
+            onClick={toggle}
             className={`block mt-5 px-4 py-2 text-sm font-medium rounded-lg transition-all duration-150 active:scale-95 ${
               inList
                 ? "bg-red-50 text-red-600 hover:bg-red-100"

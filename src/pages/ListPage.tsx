@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Layout } from "@/components/Layout";
 import { VerifiedBadge } from "@/components/VerifiedBadge";
-import { formatFollowers } from "@/utils/formatters";
+import { formatFollowers } from "@/lib/formatters";
 import { useListStore } from "@/store/listStore";
 
 export function ListPage() {
