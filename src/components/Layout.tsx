@@ -21,7 +21,7 @@ const count = useListStore((state) => state.profiles.length);
           </Link>
           <Link
             to="/list"
-            className="text-sm font-medium text-indigo-600 hover:text-indigo-800 transition-colors"
+            className="text-sm font-medium text-indigo-600 hover:text-indigo-800 hover:scale-105 active:scale-95 transition-all duration-150 inline-block"
           >
             My List {count > 0 && `(${count})`}
           </Link>

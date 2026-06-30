@@ -40,7 +40,19 @@ export function ProfileDetailPage() {
   if (!loaded) {
     return (
       <Layout title={`@${username}`}>
-        <p className="text-gray-400">Loading...</p>
+        <div className="flex gap-6 items-start max-w-2xl mx-auto bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
+          <div className="skeleton w-24 h-24 rounded-full bg-slate-200" />
+          <div className="flex-1 space-y-3">
+            <div className="skeleton h-5 w-40 bg-slate-200 rounded" />
+            <div className="skeleton h-4 w-28 bg-slate-200 rounded" />
+            <div className="grid grid-cols-2 gap-3 mt-4">
+              <div className="skeleton h-16 bg-slate-200 rounded-lg" />
+              <div className="skeleton h-16 bg-slate-200 rounded-lg" />
+              <div className="skeleton h-16 bg-slate-200 rounded-lg" />
+              <div className="skeleton h-16 bg-slate-200 rounded-lg" />
+            </div>
+          </div>
+        </div>
       </Layout>
     );
   }
@@ -70,7 +82,7 @@ export function ProfileDetailPage() {
         ← Back to search
       </Link>
 
-      <div className="flex gap-6 items-start text-left max-w-2xl mx-auto bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
+      <div className="flex gap-6 items-start text-left max-w-2xl mx-auto bg-white border border-slate-200 rounded-2xl shadow-sm p-6 fade-in">
         <img
           src={user.picture}
           alt={user.username}
@@ -157,7 +169,7 @@ export function ProfileDetailPage() {
               if (inList) removeProfile(user.user_id);
               else addProfile({ ...user, platform: platform as Platform });
             }}
-            className={`block mt-5 px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+            className={`block mt-5 px-4 py-2 text-sm font-medium rounded-lg transition-all duration-150 active:scale-95 ${
               inList
                 ? "bg-red-50 text-red-600 hover:bg-red-100"
                 : "bg-slate-900 text-white hover:bg-slate-700"

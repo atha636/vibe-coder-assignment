@@ -30,7 +30,7 @@ const { addProfile, removeProfile, isInList } = useListStore();
       role="button"
       tabIndex={0}
       onKeyDown={(e) => e.key === "Enter" && handleClick()}
-      className="flex items-center gap-3 p-4 bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all cursor-pointer"
+      className="flex items-center gap-3 p-4 bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md hover:border-slate-300 hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 cursor-pointer"
     >
       <img
         src={profile.picture}
@@ -53,7 +53,7 @@ const { addProfile, removeProfile, isInList } = useListStore();
           if (inList) removeProfile(profile.user_id);
           else addProfile({ ...profile, platform });
         }}
-        className={`shrink-0 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors ${
+        className={`shrink-0 px-3 py-1.5 text-sm font-medium rounded-lg transition-all duration-150 active:scale-95 ${
           inList
             ? "bg-red-50 text-red-600 hover:bg-red-100"
             : "bg-slate-900 text-white hover:bg-slate-700"

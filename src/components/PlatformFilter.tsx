@@ -23,7 +23,7 @@ export function PlatformFilter({
             type="button"
             onClick={() => onChange(p)}
             aria-pressed={selected === p}
-            className={`px-4 py-1.5 text-sm font-medium rounded-md transition-colors ${
+            className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all duration-200 ${
               selected === p
                 ? "bg-slate-900 text-white"
                 : "text-slate-600 hover:bg-slate-100"

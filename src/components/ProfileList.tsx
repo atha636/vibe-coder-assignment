@@ -13,7 +13,7 @@ export function ProfileList({
   onProfileClick,
 }: ProfileListProps) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 fade-in">
       {profiles.length === 0 && (
         <p className="col-span-full text-center text-slate-400 py-10">
           No profiles found
