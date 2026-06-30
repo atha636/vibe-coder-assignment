@@ -25,7 +25,7 @@ export function SearchPage() {
 
   return (
     <Layout title="Find Influencers">
-      <p className="text-gray-500 mb-4 text-sm">
+      <p className="text-sm text-slate-500 mb-6">
         Browse top creators across social platforms
       </p>
 
@@ -39,7 +39,7 @@ export function SearchPage() {
         onSearchChange={setSearchQuery}
       />
 
-      <p className="text-xs text-gray-400 mb-2">
+    <p className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-4 text-center">
         Showing {filtered.length} of {allProfiles.length} on {platform}
       </p>
 

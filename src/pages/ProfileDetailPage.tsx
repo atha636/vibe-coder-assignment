@@ -88,39 +88,48 @@ const user: FullUserProfile = profileData.data.user_profile;
         ← Back to search
       </Link>
 
-      <div className="flex gap-6 items-start text-left max-w-2xl mx-auto bg-white border border-slate-200 rounded-2xl shadow-sm p-6 fade-in">
-        <img
-          src={user.picture}
-          alt={user.username}
-          className="w-24 h-24 rounded-full border border-slate-100 object-cover"
-        />
-        <div className="flex-1">
-          <h2 className="text-xl font-bold text-slate-900">
-            @{user.username}
-            <VerifiedBadge verified={user.is_verified} />
-          </h2>
-          <p className="text-slate-500">{user.fullname}</p>
-          <span className="inline-block mt-1 text-xs font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full capitalize">
+      <div className="max-w-3xl mx-auto bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden fade-in">
+        <div className="h-28 bg-gradient-to-r from-indigo-500 via-indigo-400 to-slate-700" />
+        <div className="px-6 pb-6">
+          <div className="flex items-end gap-4 -mt-12">
+            <img
+              src={user.picture}
+              alt={user.username}
+              className="w-28 h-28 rounded-full border-4 border-white shadow-md object-cover"
+            />
+            <div className="flex-1 pb-1">
+              <h2 className="text-xl font-bold text-slate-900">
+                @{user.username}
+                <VerifiedBadge verified={user.is_verified} />
+              </h2>
+              <p className="text-slate-500">{user.fullname}</p>
+            </div>
+          </div>
+
+          <span className="inline-block mt-4 text-xs font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full capitalize">
             {platform}
           </span>
 
           {user.description && (
-            <p className="mt-3 text-sm text-slate-600">{user.description}</p>
+            <p className="mt-3 text-sm text-slate-600 max-w-xl">{user.description}</p>
           )}
 
-          <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-            <div className="border border-slate-200 bg-slate-50 p-3 rounded-lg">
-              <div className="text-slate-500 text-xs uppercase tracking-wide">Followers</div>
-              <div className="font-semibold text-slate-900 text-base mt-0.5">
+          <div className="mt-6 grid grid-cols-2 gap-4">
+            <div className="bg-indigo-50 p-4 rounded-xl">
+              <div className="text-indigo-500 text-xs uppercase tracking-wide font-medium">Followers</div>
+              <div className="font-bold text-slate-900 text-2xl mt-1">
                 {formatFollowers(user.followers)}
               </div>
             </div>
-            <div className="border border-slate-200 bg-slate-50 p-3 rounded-lg">
-              <div className="text-slate-500 text-xs uppercase tracking-wide">Engagement Rate</div>
-              <div className="font-semibold text-slate-900 text-base mt-0.5">
+            <div className="bg-indigo-50 p-4 rounded-xl">
+              <div className="text-indigo-500 text-xs uppercase tracking-wide font-medium">Engagement Rate</div>
+              <div className="font-bold text-slate-900 text-2xl mt-1">
                {formatEngagementRate(user.engagement_rate)}
               </div>
             </div>
+          </div>
+
+          <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-3 text-sm">
             {user.posts_count !== undefined && (
               <div className="border border-slate-200 bg-slate-50 p-3 rounded-lg">
                 <div className="text-slate-500 text-xs uppercase tracking-wide">Posts</div>
@@ -156,9 +165,11 @@ const user: FullUserProfile = profileData.data.user_profile;
                   {formatFollowers(user.engagements)}
                 </div>
               </div>
-            )}
+           )}
           </div>
+        </div>
 
+        <div className="px-6 pb-6">
           {user.url && (
             <a
               href={user.url}
