@@ -30,17 +30,25 @@ const { addProfile, removeProfile, isInList } = useListStore();
   return (
     <div
       onClick={handleClick}
-      className="flex items-center gap-3 p-3 border border-gray-300 mb-2 cursor-pointer hover:bg-gray-50 w-[700px]"
-      
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => e.key === "Enter" && handleClick()}
+      className="flex items-center gap-3 p-4 bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all cursor-pointer"
     >
-      <img src={profile.picture} alt={profile.username} className="w-12 h-12 rounded-full" />
-      <div className="text-left flex-1">
-        <div className="font-bold">
+      <img
+        src={profile.picture}
+        alt={profile.username}
+        className="w-14 h-14 rounded-full object-cover border border-slate-100"
+      />
+      <div className="text-left flex-1 min-w-0">
+        <div className="font-semibold text-slate-900 truncate">
           @{profile.username}
           <VerifiedBadge verified={profile.is_verified} />
         </div>
-        <div className="text-sm text-gray-600">{profile.fullname}</div>
-        <div className="text-sm">{formatFollowers(profile.followers)} followers</div>
+        <div className="text-sm text-slate-500 truncate">{profile.fullname}</div>
+        <div className="text-sm text-slate-700 mt-0.5">
+          {formatFollowers(profile.followers)} followers
+        </div>
       </div>
      <button
         onClick={(e) => {
@@ -48,10 +56,10 @@ const { addProfile, removeProfile, isInList } = useListStore();
           if (inList) removeProfile(profile.user_id);
           else addProfile({ ...profile, platform });
         }}
-        className={`px-3 py-1 text-sm rounded ${
+        className={`shrink-0 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors ${
           inList
-            ? "bg-red-100 text-red-700 hover:bg-red-200"
-            : "bg-gray-800 text-white hover:bg-gray-700"
+            ? "bg-red-50 text-red-600 hover:bg-red-100"
+            : "bg-slate-900 text-white hover:bg-slate-700"
         }`}
       >
         {inList ? "Remove" : "Add to List"}

@@ -10,17 +10,29 @@ interface LayoutProps {
 export function Layout({ children, title }: LayoutProps) {
 const count = useListStore((state) => state.profiles.length);
   return (
-    <div className="p-4 min-h-screen">
-      <header className="mb-6 border-b pb-4">
-        <Link to="/" className="text-xl font-semibold text-gray-900">
-          Influencer Search
-        </Link>
-        {title && <h1 className="text-2xl mt-2">{title}</h1>}
-        <Link to="/list" className="text-sm text-blue-600 mt-2 inline-block">
-          My List {count > 0 && `(${count})`}
-        </Link>
+    <div className="min-h-screen bg-slate-50">
+      <header className="sticky top-0 z-10 bg-white border-b border-slate-200">
+        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+          <Link
+            to="/"
+            className="text-lg font-bold text-slate-900 tracking-tight hover:text-slate-700"
+          >
+            Influencer Search
+          </Link>
+          <Link
+            to="/list"
+            className="text-sm font-medium text-indigo-600 hover:text-indigo-800 transition-colors"
+          >
+            My List {count > 0 && `(${count})`}
+          </Link>
+        </div>
+        {title && (
+          <div className="max-w-5xl mx-auto px-4 pb-3">
+            <h1 className="text-xl font-semibold text-slate-800">{title}</h1>
+          </div>
+        )}
       </header>
-      <main>{children}</main>
+      <main className="max-w-5xl mx-auto px-4 py-6">{children}</main>
     </div>
   );
 }

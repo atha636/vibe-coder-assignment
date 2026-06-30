@@ -111,3 +111,11 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+body {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+::selection {
+  background-color: #c7d2fe;
+}
